@@ -4,7 +4,7 @@ const progressText = document.querySelector('#progressText');
 const scoreText = document.querySelector('#scoreText');
 
 let currentQuestion = {};
-let acceptingAnswers = true;
+let acceptingAnswers = false;
 let score = 0;
 let questionCounter = 0;
 let availableQuestions = [];
@@ -51,46 +51,32 @@ getNewQuestion = () => {
     }
 
     incrementRound();
-    
+
     const questionsIndex = Math.floor(Math.random() * availableQuestions.length);
     currentQuestion = availableQuestions[questionsIndex];
-    sound.src = currentQuestion.question; // set audio
+    availableQuestions.splice(questionsIndex, 1);
+    
+    setSound();
 
-    videos.forEach(video => {
-        const number = video.dataset['number'];
-        video.src = currentQuestion['choice' + number]; // set videos
-    })
+    setVideos();   
 
     loadVideos();
     
-    availableQuestions.splice(questionsIndex, 1);
-
     acceptingAnswers = true;
+
+    checkAnswer();
 }
 
-videos.forEach(video => {
-    video.addEventListener('click', e => {
-        if(!acceptingAnswers) return;
+setSound = () => {
+    sound.src = currentQuestion.question;
+}
 
-        acceptingAnswers = false;
-        const selectedChoice = e.target;
-        const selectedAnswer = selectedChoice.dataset['number'];
-
-        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
-
-        if(classToApply === 'correct') {
-            incrementScore(SCORE_POINTS);
-        }
-
-        selectedChoice.parentElement.classList.add(classToApply);
-
-        setTimeout(() => {
-            selectedChoice.parentElement.classList.remove(classToApply);
-            getNewQuestion();
-
-        }, 1000)
-    })
-})
+setVideos = () => {
+    videos.forEach(video => {
+        const number = video.dataset['number'];
+        video.src = currentQuestion['choice' + number];
+    });
+}
 
 loadVideos = () => {
     videos.forEach(video => {
@@ -104,6 +90,34 @@ startVideosAndSound = () => {
     sound.play();
     videos.forEach(videos => {
         videos.play();
+    });
+}
+
+checkAnswer = () => {
+
+    videos.forEach(video => {
+        video.addEventListener('click', e => {
+            if(!acceptingAnswers) return;
+
+            acceptingAnswers = false;
+            const selectedChoice = e.target;
+            const selectedAnswer = selectedChoice.dataset['number'];
+
+            let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
+
+            if(classToApply === 'correct') {
+                incrementScore(SCORE_POINTS);
+                console.log('choice correct');
+            }
+
+            selectedChoice.parentElement.classList.add(classToApply);
+
+            setTimeout(() => {
+                selectedChoice.parentElement.classList.remove(classToApply);
+                getNewQuestion();
+
+            }, 1000)
+        })
     });
 }
 
