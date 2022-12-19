@@ -1,9 +1,14 @@
+const username = document.querySelector('#username');
+const startGameBtn = document.querySelector('#startGameBtn');
+const startScreen = document.querySelector('#home');
+const gameScreen = document.querySelector('#game');
+
 const sound = document.querySelector('#sound');
 const videos = Array.from(document.querySelectorAll('.choice-video'));
 const progressText = document.querySelector('#progressText');
 const scoreText = document.querySelector('#scoreText');
 
-var startTime = 0; 
+var startTime = 0;
 var endTime = 0;
 var speed = 0;
 
@@ -40,7 +45,21 @@ let questions = [
 const SCORE_POINTS = 100;
 const MAX_ROUNDS = 3;
 
+username.addEventListener('keydown', () => {
+    if (username.value != "") {
+        console.log('field filled');
+        startGameBtn.disabled = false;
+    } else {
+        console.log('field empty');
+        startGameBtn.disabled = true;
+    }
+});
+
+
 startGame = () => {
+    startScreen.hidden = true;
+    gameScreen.hidden = false;
+    localStorage.setItem('username', username.value);
     questionCounter = 0;
     score = 0;
     availableQuestions = [...questions];
@@ -48,10 +67,13 @@ startGame = () => {
     scoreText.innerText = 'Punkte ' + score;
 }
 
+startGameBtn.addEventListener('click', startGame);
+
+
 getNewQuestion = () => {
-    if(availableQuestions.length === 0 || questionCounter > MAX_ROUNDS) {
+    if (availableQuestions.length === 0 || questionCounter > MAX_ROUNDS) {
         localStorage.setItem('mostRecentScore', score);
-        return window.location.assign('end.html');
+        return window.location.assign('highscore.html');
     }
 
     incrementRound();
@@ -59,13 +81,13 @@ getNewQuestion = () => {
     const questionsIndex = Math.floor(Math.random() * availableQuestions.length);
     currentQuestion = availableQuestions[questionsIndex];
     availableQuestions.splice(questionsIndex, 1);
-    
+
     setSound();
 
-    setVideos();   
+    setVideos();
 
     loadVideos();
-    
+
     acceptingAnswers = true;
 
     checkAnswer();
@@ -84,8 +106,8 @@ setVideos = () => {
 
 loadVideos = () => {
     videos.forEach(video => {
-        video.oncanplaythrough = function() {
-        startVideosAndSound();
+        video.oncanplaythrough = function () {
+            startVideosAndSound();
         }
     });
 }
@@ -104,8 +126,8 @@ checkAnswer = () => {
         video.addEventListener('click', e => {
             endTime = performance.now();
             calculateSpeed();
-            
-            if(!acceptingAnswers) return;
+
+            if (!acceptingAnswers) return;
 
             acceptingAnswers = false;
             const selectedChoice = e.target;
@@ -113,7 +135,7 @@ checkAnswer = () => {
 
             let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
 
-            if(classToApply === 'correct') {
+            if (classToApply === 'correct') {
                 incrementScore(SCORE_POINTS);
                 console.log('choice correct');
             }
@@ -123,8 +145,7 @@ checkAnswer = () => {
             setTimeout(() => {
                 selectedChoice.parentElement.classList.remove(classToApply);
                 getNewQuestion();
-
-            }, 1000)
+            }, 2000)
         })
     });
 }
@@ -136,12 +157,10 @@ incrementRound = () => {
 
 calculateSpeed = () => {
     speed = endTime - startTime;
-    console.log('Gebrauchte Geschwindikeit in Millisekunden: ' + speed);
+    console.log('Gebrauchte Geschwindigkeit in Millisekunden: ' + speed);
 }
 
 incrementScore = num => {
-    score +=num;
+    score += num;
     scoreText.innerText = 'Punkte: ' + score;
 }
-
-startGame();
