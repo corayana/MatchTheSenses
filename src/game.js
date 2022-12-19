@@ -1,14 +1,13 @@
-const question = document.querySelector('#question');
-const choices = Array.from(document.querySelectorAll('.choice-video'));
+const sound = document.querySelector('#sound');
+const videos = Array.from(document.querySelectorAll('.choice-video'));
 const progressText = document.querySelector('#progressText');
 const scoreText = document.querySelector('#scoreText');
 
-
-let currentQuestion = {}
-let acceptingAnswers = true
-let score = 0
-let questionCounter = 0
-let availableQuestions = []
+let currentQuestion = {};
+let acceptingAnswers = true;
+let score = 0;
+let questionCounter = 0;
+let availableQuestions = [];
 
 let questions = [
     {
@@ -34,67 +33,88 @@ let questions = [
     },
 ]
 
-const SCORE_POINTS = 100
-const MAX_ROUNDS = 3
+const SCORE_POINTS = 100;
+const MAX_ROUNDS = 3;
 
 startGame = () => {
-    questionCounter = 0
-    score = 0
-    availableQuestions = [...questions]
-    getNewQuestion()
+    questionCounter = 0;
+    score = 0;
+    availableQuestions = [...questions];
+    getNewQuestion();
     scoreText.innerText = 'Punkte ' + score;
 }
 
 getNewQuestion = () => {
     if(availableQuestions.length === 0 || questionCounter > MAX_ROUNDS) {
-        localStorage.setItem('mostRecentScore', score)
-        return window.location.assign('end.html')
+        localStorage.setItem('mostRecentScore', score);
+        return window.location.assign('end.html');
     }
 
-    questionCounter++
-    progressText.innerText = `Runde ${questionCounter} / ${MAX_ROUNDS}`
+    incrementRound();
     
-    const questionsIndex = Math.floor(Math.random() * availableQuestions.length)
-    currentQuestion = availableQuestions[questionsIndex]
-    question.src = currentQuestion.question; // set audio
+    const questionsIndex = Math.floor(Math.random() * availableQuestions.length);
+    currentQuestion = availableQuestions[questionsIndex];
+    sound.src = currentQuestion.question; // set audio
 
-    choices.forEach(choice => {
-        const number = choice.dataset['number']
-        choice.src = currentQuestion['choice' + number]; // set videos
+    videos.forEach(video => {
+        const number = video.dataset['number'];
+        video.src = currentQuestion['choice' + number]; // set videos
     })
 
-    availableQuestions.splice(questionsIndex, 1)
+    loadVideos();
+    
+    availableQuestions.splice(questionsIndex, 1);
 
-    acceptingAnswers = true
+    acceptingAnswers = true;
 }
 
-choices.forEach(choice => {
-    choice.addEventListener('click', e => {
-        if(!acceptingAnswers) return
+videos.forEach(video => {
+    video.addEventListener('click', e => {
+        if(!acceptingAnswers) return;
 
-        acceptingAnswers = false
-        const selectedChoice = e.target
-        const selectedAnswer = selectedChoice.dataset['number']
+        acceptingAnswers = false;
+        const selectedChoice = e.target;
+        const selectedAnswer = selectedChoice.dataset['number'];
 
-        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
+        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
 
         if(classToApply === 'correct') {
-            incrementScore(SCORE_POINTS)
+            incrementScore(SCORE_POINTS);
         }
 
-        selectedChoice.parentElement.classList.add(classToApply)
+        selectedChoice.parentElement.classList.add(classToApply);
 
         setTimeout(() => {
-            selectedChoice.parentElement.classList.remove(classToApply)
-            getNewQuestion()
+            selectedChoice.parentElement.classList.remove(classToApply);
+            getNewQuestion();
 
         }, 1000)
     })
 })
+
+loadVideos = () => {
+    videos.forEach(video => {
+        video.oncanplaythrough = function() {
+        startVideosAndSound();
+        }
+    });
+}
+
+startVideosAndSound = () => {
+    sound.play();
+    videos.forEach(videos => {
+        videos.play();
+    });
+}
+
+incrementRound = () => {
+    questionCounter++;
+    progressText.innerText = `Runde ${questionCounter} / ${MAX_ROUNDS}`;
+}
 
 incrementScore = num => {
     score +=num;
     scoreText.innerText = 'Punkte: ' + score;
 }
 
-startGame()
+startGame();

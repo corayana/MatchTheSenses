@@ -226,7 +226,6 @@ input::placeholder{
 
 video {
   width: 100%;
-  background-color: #FFD558;
   cursor: pointer;
   position: relative;
 }
