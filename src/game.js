@@ -3,6 +3,10 @@ const videos = Array.from(document.querySelectorAll('.choice-video'));
 const progressText = document.querySelector('#progressText');
 const scoreText = document.querySelector('#scoreText');
 
+var startTime = 0; 
+var endTime = 0;
+var speed = 0;
+
 let currentQuestion = {};
 let acceptingAnswers = false;
 let score = 0;
@@ -91,12 +95,16 @@ startVideosAndSound = () => {
     videos.forEach(videos => {
         videos.play();
     });
+    startTime = performance.now();
 }
 
 checkAnswer = () => {
 
     videos.forEach(video => {
         video.addEventListener('click', e => {
+            endTime = performance.now();
+            calculateSpeed();
+            
             if(!acceptingAnswers) return;
 
             acceptingAnswers = false;
@@ -124,6 +132,11 @@ checkAnswer = () => {
 incrementRound = () => {
     questionCounter++;
     progressText.innerText = `Runde ${questionCounter} / ${MAX_ROUNDS}`;
+}
+
+calculateSpeed = () => {
+    speed = endTime - startTime;
+    console.log('Gebrauchte Geschwindikeit in Millisekunden: ' + speed);
 }
 
 incrementScore = num => {
