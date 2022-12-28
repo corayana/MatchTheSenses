@@ -126,13 +126,23 @@ html {
 
 .container {
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   justify-items: center;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.8rem;
+}
+
+.yellow {
+  background-color: #FFD558;
+}
+
+.whiteBox{
+  background-color: #ffffff;
+  border-radius: 10px;
+
 }
 
 .flex-column {
@@ -179,6 +189,13 @@ h3 {
   font-weight: 700;
 }
 
+.guideText {
+ font-size: 1em;
+ font-weight: 500;
+ padding: 3rem;
+ justify-content: center;
+ align-items: center;
+}
 
 
 /* Button */
@@ -248,7 +265,7 @@ h3 {
 
 input {
   width: 20rem;
-  padding: 1.3rem;
+  padding: 1.3rem 0.6rem;
   font-size: 1.2rem;
   border: none;
   box-shadow: 0 0.1rem 1.4rem 0 rgba(236, 236, 236, 0.5);
@@ -262,7 +279,6 @@ input::placeholder {
 
 #username {
   margin-bottom: 1rem;
-  width: 100%;
   outline: none;
 }
 
