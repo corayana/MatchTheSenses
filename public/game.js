@@ -45,7 +45,7 @@ let questions = [
 const SCORE_POINTS = 100;
 const MAX_ROUNDS = 3;
 
-username.addEventListener('keydown', () => {
+username.addEventListener('keyup', () => {
     if (username.value != "") {
         console.log('field filled');
         startGameBtn.disabled = false;
@@ -56,21 +56,20 @@ username.addEventListener('keydown', () => {
 });
 
 
-startGame = () => {
+startGame = async () => {
     startScreen.hidden = true;
     gameScreen.hidden = false;
     localStorage.setItem('username', username.value);
     questionCounter = 0;
     score = 0;
     availableQuestions = [...questions];
-    getNewQuestion();
+    await getNewQuestion();
     scoreText.innerText = 'Punkte ' + score;
 }
 
 startGameBtn.addEventListener('click', startGame);
 
-
-getNewQuestion = () => {
+getNewQuestion = async () => {
     if (availableQuestions.length === 0 || questionCounter > MAX_ROUNDS) {
         localStorage.setItem('mostRecentScore', score);
         return window.location.assign('highscore.html');
@@ -86,7 +85,9 @@ getNewQuestion = () => {
 
     setVideos();
 
-    loadVideos();
+    await loadVideos();
+
+    startVideosAndSound();
 
     acceptingAnswers = true;
 
@@ -104,18 +105,28 @@ setVideos = () => {
     });
 }
 
-loadVideos = () => {
-    videos.forEach(video => {
-        video.oncanplaythrough = function () {
-            startVideosAndSound();
-        }
+loadVideos = async () => {
+    let videosLoaded = videos.map(video => {
+        return new Promise(function (resolve, reject) {
+            video.addEventListener('canplaythrough', function () {
+                console.log('video can play through');
+                resolve();
+            });
+        })
     });
+    await Promise.all(videosLoaded);
 }
 
-startVideosAndSound = () => {
+startVideosAndSound = async () => {
+    await new Promise(resolve => {
+        setTimeout(resolve, 500);
+    });
     sound.play();
-    videos.forEach(videos => {
-        videos.play();
+    sound.loop = true;
+    videos.forEach(video => {
+        video.play();
+        video.loop = true;
+        video.muted = true;
     });
     startTime = performance.now();
 }

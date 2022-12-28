@@ -192,6 +192,7 @@ h3 {
   margin-bottom: 1rem;
   text-decoration: none;
   color: rgb(28, 26, 26);
+  border: none;
   background: #5B6EEF;
   border-radius: 4px;
 }
