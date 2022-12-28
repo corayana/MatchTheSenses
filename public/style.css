@@ -195,6 +195,7 @@ h3 {
  padding: 3rem;
  justify-content: center;
  align-items: center;
+ line-height: 130%;
 }
 
 
@@ -280,12 +281,6 @@ input::placeholder {
 #username {
   margin-bottom: 1rem;
   outline: none;
-}
-
-#form-text {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  text-align: center;
 }
 
 #saveUsernameBtn {
