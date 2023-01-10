@@ -328,7 +328,7 @@ video {
 
 .correct {
   border-style: solid;
-  border-color: #50D864;
+  border-color: #44AF69;
   border-width: 5px;
 }
 
@@ -354,4 +354,22 @@ video {
 li {
   text-align: justify;
   text-align-last: justify;
+}
+
+/* Blinkende Antwort*/
+
+.blink {
+  animation-name: animation_blink;
+  animation-timing-function: ease-in;
+  animation-duration: 1s; 
+  animation-iteration-count: 3;    
+  border: 5px #44AF69 solid; 
+  background-color: #44AF69;
+  z-index: -1;
+  /* filter: brightness(50%); */
+  filter: hue-rotate(90deg) saturate(200%);
+}
+
+@keyframes animation_blink {
+  50% { border-color:#fff ; }
 }
