@@ -48,7 +48,7 @@ async function getMessageHighscoresFromDb() {
   for (let item of dataArray) {
     highscores.push({ player: item.player, points: item.points});
   }
-  
+
   console.log(highscores);
 }
 
@@ -62,7 +62,8 @@ function handlePostRequest(url, data) {
       dbCollection.insertOne(score);
       highscores.push(score);
       highscores.sort((a, b) => b.points - a.points);
-      highscores.length = maxHighscores;
+
+      highscores.length = Math.min(highscores.length, maxHighscores);
 
       // print score to server console
       console.log(`#${score.player}: "${score.points}"`);
