@@ -70,19 +70,12 @@ function handlePostRequest(url, data) {
       break;
     }
 
-    // clear highscores and db collection
-    case "/clear": {
-      highscores.length = 0;
-      dbCollection.deleteMany({});
-      break;
-    }
-
     default:
       console.error(`unknown POST request URL: ${url}`);
       break;
   }
 
-  return "";
+  return '';
 }
 
 function handleGetRequest(url) {
@@ -93,12 +86,19 @@ function handleGetRequest(url) {
       return JSON.stringify(highscores);
     }
 
+    // clear highscores and db collection
+    case "/clear": {
+      highscores = [];
+      dbCollection.deleteMany({});
+      break;
+    }
+
     default:
       console.error(`unknown GET request URL: ${url}`);
       break;
   }
 
-  return "";
+  return '';
 }
 
 // handle POST and GET requests (application independent)
