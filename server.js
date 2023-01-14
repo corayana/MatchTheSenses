@@ -68,6 +68,7 @@ function handlePostRequest(url, data) {
 
       // add score to db
       dbCollection.insertOne(score);
+      delete score._id;
       break;
     }
 
