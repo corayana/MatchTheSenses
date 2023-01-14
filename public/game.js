@@ -223,7 +223,7 @@ function checkAnswer(e) {
       console.log('choice correct');
 
       incrementPoints(scorePoints, duration);
-      pointsText.innerText = 'points: ' + points;
+      pointsText.innerText = `${points} Punkte`;;
     }
 
     selectedChoice.parentElement.classList.add(classToApply);
