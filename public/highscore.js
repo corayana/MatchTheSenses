@@ -1,34 +1,19 @@
 const finalScore = document.querySelector('#finalScore');
-const username = localStorage.getItem('username');
-const mostRecentScore = localStorage.getItem('mostRecentScore');
+const highscoreList = document.querySelector('#highscoreList');
+const result = sessionStorage.getItem('result');
 
-const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-const highScoresList = document.querySelector('#highScoresList');
+displayHighscores();
 
-const MAX_HIGH_SCORES = 5;
+async function displayHighscores() {
+  finalScore.innerText = 'Du hast ' + result + ' Punkte erreicht';
 
-finalScore.innerText = 'Du hast ' + mostRecentScore + ' Punkte erreicht';
+  const highscores = await sendGetRequest('/highscores');
 
-saveHighScore = () => {
+  console.log(highscores);
 
-    const score = {
-        score: mostRecentScore,
-        name: username
-    };
-
-    highScores.push(score);
-
-    highScores.sort((a, b) => {
-        return b.score - a.score
-    });
-    highScores.splice(10);
-
-    localStorage.setItem('highScores', JSON.stringify(highScores))
+  highscoreList.innerHTML =
+    highscores.map(score => {
+      console.log(score);
+      return `<li class="high-score">${score.player} ${score.points}</li>` // Tabelle stattdessen nutzen?
+    }).join('');
 }
-
-saveHighScore();
-
-highScoresList.innerHTML =
-    highScores.map(score => {
-        return `<li class="high-score">${score.name} ${score.score}</li>` // Tabelle stattdessen nutzen?
-    }).join('')

@@ -7,7 +7,8 @@
   <title>Quiz Page</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/x-icon" href="../assets/favicon.png" />
-
+  <script src="client.js" defer></script>
+  <script src="highscore.js" defer></script>
 </head>
 
 <body>
@@ -17,16 +18,13 @@
   </div>
 
   <div class="container">
-    <div id="highScores" class="flex-center flex-column">
+    <div id="highscores" class="flex-center flex-column">
       <h2 id="finalScore">0</h2>
       <h2 id="finalScore">Rangliste</h2>
-      <ul id="highScoresList"></ul>
+      <ul id="highscoreList"></ul>
       <a href="game.html" class="btn">Neues Spiel starten</a>
     </div>
   </div>
-
-  <script src="highscore.js"></script>
-
 </body>
 
 </html>

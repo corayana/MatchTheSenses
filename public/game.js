@@ -1,4 +1,4 @@
-const usernameElement = document.querySelector('#username');
+const usernameField = document.querySelector('#username');
 const startGameBtn = document.querySelector('#startGameBtn');
 const startScreen = document.querySelector('#home');
 const gameScreen = document.querySelector('#game');
@@ -6,16 +6,20 @@ const gameScreen = document.querySelector('#game');
 const audioElement = document.querySelector('#sound');
 const videoElements = Array.from(document.querySelectorAll('.choice-video'));
 const progressText = document.querySelector('#progressText');
-const scoreText = document.querySelector('#scoreText');
+const pointsText = document.querySelector('#pointsText');
 
+const scorePoints = 5;
+const maxRounds = 3;
+
+let username = '';
 let matchingIndex = null;
-var startTime = 0;
+let startTime = 0;
 let availableChallenges = [];
 let currentChallenge = null;
 let acceptingAnswers = false;
 let matchingVideoElem = null;
 let roundCounter = 0;
-let score = 0;
+let points = 0;
 
 const challenges = [
   [
@@ -71,40 +75,38 @@ const challenges = [
   ],
 ];
 
-const SCORE_POINTS = 5;
-const MAX_ROUNDS = 3;
-
 startGameBtn.addEventListener('click', startGame);
-usernameElement.addEventListener('keyup', () => {
-  if (usernameElement.value != "") {
-    console.log('field filled');
-    startGameBtn.disabled = false;
-  } else {
-    console.log('field empty');
-    startGameBtn.disabled = true;
+usernameField.addEventListener('keyup', (e) => {
+  username = usernameField.value;
+
+  if (e.key !== "Enter") {
+    startGameBtn.disabled = (username === '');
+  } else if (username !== '') {
+    startGame();
   }
 });
 
 async function startGame() {
   startScreen.hidden = true;
   gameScreen.hidden = false;
-  localStorage.setItem('username', usernameElement.value);
+
   roundCounter = 0;
-  score = 0;
+  points = 0;
   availableChallenges = [...challenges];
+
   await getNewChallenge();
-  scoreText.innerText = 'Punkte ' + score;
+  pointsText.innerText = `${points} Punkte`;;
 }
 
 async function getNewChallenge() {
-  if (availableChallenges.length === 0 || roundCounter > MAX_ROUNDS) {
-    localStorage.setItem('mostRecentScore', score);
+  if (availableChallenges.length === 0 || roundCounter > maxRounds) {
+    sessionStorage.setItem('result', points);
     return window.location.assign('highscore.html');
   }
 
   // increment round
   roundCounter++;
-  progressText.innerText = `Runde ${roundCounter} / ${MAX_ROUNDS}`;
+  progressText.innerText = `Runde ${roundCounter} / ${maxRounds}`;
 
   // select challenge
   const challengeIndex = Math.floor(Math.random() * availableChallenges.length);
@@ -134,7 +136,7 @@ async function getNewChallenge() {
   // put audio index back to video indices
   videoIndices.push(matchingIndex);
 
-  console.log('videos');
+  let logStr = 'videos: ';
 
   for (let i = 0; i < videoElements.length; i++) {
     const videoElem = videoElements[i];
@@ -146,11 +148,13 @@ async function getNewChallenge() {
 
     if (videoIndex === matchingIndex) {
       matchingVideoElem = videoElem;
-      console.log('x', videoIndex);
+      logStr += `[${videoIndex}] `;
     } else {
-      console.log('-', videoIndex);
+      logStr += `${videoIndex} `;
     }
   }
+
+  console.log(logStr);
 
   await videosLoaded();
   startVideosAndSound();
@@ -200,14 +204,18 @@ function checkAnswer(e) {
     const endTime = performance.now();
     const duration = endTime - startTime;
 
-    console.log('Gebrauchte Zeit: ' + (0.001 * duration).toFixed(2) + ' Sekunden');
+    console.log(`time: ${(0.001 * duration).toFixed(2)}s`);
 
     const selectedChoice = e.target;
     const classToApply = (selectedChoice === matchingVideoElem) ? 'correct' : 'incorrect';
 
     if (classToApply === 'correct') {
-      incrementScore(SCORE_POINTS, duration);
       console.log('choice correct');
+
+      incrementPoints(scorePoints, duration);
+
+      const data = { player: username, points: points };
+      sendPostRequest("/score", JSON.stringify(data));
     }
 
     selectedChoice.parentElement.classList.add(classToApply);
@@ -234,14 +242,14 @@ function calculateScore() {
 
 }
 
-function incrementScore(num, duration) {
-  score += num;
+function incrementPoints(num, duration) {
+  points += num;
 
   if (duration <= 5000) {
-    score += 5;
+    points += 5;
   } else if (duration <= 6000) {
-    score += 4;
+    points += 4;
   }
 
-  scoreText.innerText = 'Punkte: ' + score;
+  pointsText.innerText = 'points: ' + points;
 }
