@@ -16,7 +16,7 @@ const port = Number(process.env.PORT) || 8000;
 // main function waiting for async functions
 (async function main() {
   await connectToDb();
-  await getMessageHighscoresFromDb();
+  await getDataFromDb();
 
   // create and launch server
   let server = http.createServer(handleRequest);
@@ -42,11 +42,11 @@ async function connectToDb() {
   }
 }
 
-async function getMessageHighscoresFromDb() {
+async function getDataFromDb() {
   const dataArray = await dbCollection.find().sort({ "points": -1 }).toArray();
 
   for (let item of dataArray) {
-    highscores.push({ player: item.player, points: item.points});
+    highscores.push({ player: item.player, points: item.points });
   }
 
   console.log(highscores);
@@ -58,15 +58,17 @@ function handlePostRequest(url, data) {
     case "/score": {
       const score = JSON.parse(data);
 
+      // add score to highscores
+      highscores.push(score);
+      console.log(score);
+
       // add score to db collection and highscores
       dbCollection.insertOne(score);
-      highscores.push(score);
-      highscores.sort((a, b) => b.points - a.points);
 
+      highscores.sort((a, b) => b.points - a.points);
       highscores.length = Math.min(highscores.length, maxHighscores);
 
       // print score to server console
-      console.log(`#${score.player}: "${score.points}"`);
       break;
     }
 
