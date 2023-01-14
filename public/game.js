@@ -75,6 +75,10 @@ const challenges = [
   ],
 ];
 
+// get username stored
+usernameField.value = username = sessionStorage.getItem('username') || '';
+startGameBtn.disabled = (username === '');
+
 startGameBtn.addEventListener('click', startGame);
 usernameField.addEventListener('keyup', (e) => {
   username = usernameField.value;
@@ -87,6 +91,8 @@ usernameField.addEventListener('keyup', (e) => {
 });
 
 async function startGame() {
+  sessionStorage.setItem('username', username);
+
   startScreen.hidden = true;
   gameScreen.hidden = false;
 
@@ -100,6 +106,10 @@ async function startGame() {
 
 async function getNewChallenge() {
   if (availableChallenges.length === 0 || roundCounter > maxRounds) {
+    // send resulting score to server
+    const data = { player: username, points: points };
+    sendPostRequest("/score", JSON.stringify(data));
+
     sessionStorage.setItem('result', points);
     return window.location.assign('highscore.html');
   }
@@ -213,9 +223,7 @@ function checkAnswer(e) {
       console.log('choice correct');
 
       incrementPoints(scorePoints, duration);
-
-      const data = { player: username, points: points };
-      sendPostRequest("/score", JSON.stringify(data));
+      pointsText.innerText = 'points: ' + points;
     }
 
     selectedChoice.parentElement.classList.add(classToApply);
@@ -238,10 +246,6 @@ function checkAnswer(e) {
   }
 }
 
-function calculateScore() {
-
-}
-
 function incrementPoints(num, duration) {
   points += num;
 
@@ -250,6 +254,4 @@ function incrementPoints(num, duration) {
   } else if (duration <= 6000) {
     points += 4;
   }
-
-  pointsText.innerText = 'points: ' + points;
 }
