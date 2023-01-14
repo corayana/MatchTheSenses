@@ -58,17 +58,17 @@ function handlePostRequest(url, data) {
     case "/score": {
       const score = JSON.parse(data);
 
+      // add score to db collection and highscores
+      dbCollection.insertOne(score);
+      delete score._id;
+
       // add score to highscores
       highscores.push(score);
       console.log(score);
 
-      // add score to db collection and highscores
-      dbCollection.insertOne(score);
-
+      // sort and truncate highscores
       highscores.sort((a, b) => b.points - a.points);
       highscores.length = Math.min(highscores.length, maxHighscores);
-
-      // print score to server console
       break;
     }
 
