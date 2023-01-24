@@ -181,7 +181,7 @@ async function videosLoaded() {
   let promises = videoElements.map((video) => {
     return new Promise((resolve, reject) => {
       video.addEventListener('canplaythrough', () => {
-        console.log('video can play through');
+        // console.log('video can play through');
         resolve();
       });
     })
@@ -253,5 +253,12 @@ function incrementPoints(num, duration) {
     points += 5;
   } else if (duration <= 6000) {
     points += 4;
+  } else if (duration <= 7000) {
+    points += 3;
+  } else if (duration <= 8000) {
+    points += 2;
+  } else {
+    points += 0;
   }
+  console.log('points: ' + points);
 }
