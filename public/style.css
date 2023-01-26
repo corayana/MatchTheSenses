@@ -310,13 +310,15 @@ input::placeholder {
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  background-color: #FFD558;
+  background-color: #FFD558; 
   padding: 0;
   margin: 0.5em 0;
 }
 
 video {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   cursor: pointer;
   position: relative;
 }
@@ -326,17 +328,37 @@ video {
 /* Feedback */
 
 .correct {
-  border-style: solid;
-  border-color: #44AF69;
-  border-width: 5px;
+  /* border-style: solid;
+  border-color: #4ED447;
+  border-width: 7px; */
+  border: 7px #4ED447 solid; 
 }
 
 .incorrect {
-  border-style: solid;
+  /* border-style: solid;
   border-color: #FF4F63;
-  border-width: 5px;
+  border-width: 7px; */
+  border: 7px #FF4F63 solid; 
 }
 
+.greyedOut {
+  filter: brightness(60%);
+}
+
+/* Blinkende Antwort*/
+
+.blink {
+  animation-name: animation_blink;
+  animation-timing-function: ease-in;
+  animation-duration: 0.4s; 
+  animation-iteration-count: 3;    
+  border: 7px #4ED447 solid; 
+  z-index: -1;
+}
+
+@keyframes animation_blink {
+  50% { border-color:#fff ; }
+}
 
 
 /* Highscore */
@@ -353,22 +375,4 @@ video {
 li {
   text-align: justify;
   text-align-last: justify;
-}
-
-/* Blinkende Antwort*/
-
-.blink {
-  animation-name: animation_blink;
-  animation-timing-function: ease-in;
-  animation-duration: 1s; 
-  animation-iteration-count: 3;    
-  border: 5px #44AF69 solid; 
-  background-color: #44AF69;
-  z-index: -1;
-  /* filter: brightness(50%); */
-  filter: hue-rotate(90deg) saturate(200%);
-}
-
-@keyframes animation_blink {
-  50% { border-color:#fff ; }
 }

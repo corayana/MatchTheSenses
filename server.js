@@ -46,7 +46,7 @@ async function getDataFromDb() {
   const dataArray = await dbCollection.find().sort({ "points": -1 }).toArray();
 
   for (let item of dataArray) {
-    highscores.push({ player: item.player, points: item.points });
+    highscores.push({ player: item.player, points: item.points });     // todo extend when extending data model
   }
 
   console.log(highscores);
