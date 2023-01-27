@@ -334,14 +334,14 @@ video {
   top: 90%;
   left: 50%;
   font-size: 1.3rem;
-  font-weight: 800;
+  font-weight: 700;
   text-align: center;
   text-shadow: 1px 1px #000000;
   color: white;
-  transform: translate(-50%, -50%);
-  /* background-color: #00000a60; */
+  transform: translate(-50%, -30%);
+  background-color: #00000a40;
+  width: 100%;
 }
-
 
 /* Feedback */
 
