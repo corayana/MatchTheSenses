@@ -126,13 +126,17 @@ html {
 
 .container {
   width: 100vw;
-  height: 100vh;
+  /*height: 100vh;*/  /* wenn weg, dann weißrau unten weg*/
   display: flex;
   justify-content: center;
   justify-items: center;
   max-width: 80rem;
   margin: 0 auto;
-  padding: 1.8rem;
+  padding: 10px 1.8rem;
+}
+
+.home {
+  height: 100vh;
 }
 
 .yellow {
@@ -261,9 +265,10 @@ p{
 
 .footer {
   text-align: center;
-  position: fixed;
+  position: relative;
+  /*position: fixed;*/ /* Element ist ganz unten am Screen, überlappt aber Elemente*/
   left: 0;
-  bottom: 2rem;
+  top: 12px;
   width: 100%;
 }
 
@@ -307,7 +312,7 @@ input::placeholder {
 /* Game */
 
 .choice-container {
-  height: 100%;
+  /*height: 100%;*/
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -354,16 +359,10 @@ video {
 /* Feedback */
 
 .correct {
-  /* border-style: solid;
-  border-color: #4ED447;
-  border-width: 7px; */
   border: 7px #4ED447 solid;
 }
 
 .incorrect {
-  /* border-style: solid;
-  border-color: #FF4F63;
-  border-width: 7px; */
   border: 7px #FF4F63 solid;
 }
 
