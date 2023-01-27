@@ -190,6 +190,12 @@ h3 {
   margin: 20px 0 8px 0;
 }
 
+p{
+  font-size: 1em;
+  text-align: center;
+  font-weight: 800;
+}
+
 .guideText {
   font-size: 1em;
   font-weight: 500;
@@ -342,6 +348,7 @@ video {
   transform: translate(-50%, -30%);
   background-color: #00000a40;
   width: 100%;
+  border-radius: 0 0 12px 12px;
 }
 
 /* Feedback */
