@@ -371,6 +371,7 @@ async function startVideosAndSound() {
   audioElement.loop = true;
 
   for (let elem of videoElements) {
+    elem.pause();
     elem.play();
     elem.loop = true;
     elem.muted = true;
