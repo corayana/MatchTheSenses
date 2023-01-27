@@ -182,9 +182,11 @@ h1 {
 }
 
 h2 {
-  font-size: 1.8em;
+  font-size: 1.6em;
   font-weight: 900;
-  margin: 0.8rem;
+  padding: 0 12px;
+  display: inline;
+  text-align: left;
 }
 
 h3 {
@@ -207,6 +209,16 @@ p{
   justify-content: center;
   align-items: center;
   line-height: 130%;
+}
+
+/* Logo Startseite */
+#logo-home {
+  width: 8rem;
+}
+
+#logo-header {
+  width: 2.6rem;
+  float: left;
 }
 
 
@@ -252,6 +264,8 @@ p{
   background-color: #FFD558;
   color: #ffffff;
   padding: 10px 20px;
+  position: relative;
+  text-align: start;
 }
 
 
