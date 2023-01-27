@@ -12,6 +12,7 @@ html {
 /* Responsive Layout */
 
 @media only screen and (min-width: 600px) {
+
   /* For tablets: */
   .col-s-1 {
     width: 8.33%;
@@ -138,7 +139,7 @@ html {
   background-color: #FFD558;
 }
 
-.whiteBox{
+.whiteBox {
   background-color: #ffffff;
   border-radius: 10px;
 
@@ -189,12 +190,12 @@ h3 {
 }
 
 .guideText {
- font-size: 1em;
- font-weight: 500;
- padding: 3rem;
- justify-content: center;
- align-items: center;
- line-height: 130%;
+  font-size: 1em;
+  font-weight: 500;
+  padding: 3rem;
+  justify-content: center;
+  align-items: center;
+  line-height: 130%;
 }
 
 
@@ -310,7 +311,7 @@ input::placeholder {
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  background-color: #FFD558; 
+  background-color: #FFD558;
   padding: 0;
   margin: 0.5em 0;
 }
@@ -321,8 +322,25 @@ video {
   object-fit: cover;
   cursor: pointer;
   position: relative;
+  z-index: 0;
 }
 
+
+/* Title on top of video*/
+
+.title-overlay {
+  z-index: 2;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  font-size: 1.3rem;
+  font-weight: 800;
+  text-align: center;
+  text-shadow: 1px 1px #000000;
+  color: white;
+  transform: translate(-50%, -50%);
+  /* background-color: #00000a60; */
+}
 
 
 /* Feedback */
@@ -331,14 +349,14 @@ video {
   /* border-style: solid;
   border-color: #4ED447;
   border-width: 7px; */
-  border: 7px #4ED447 solid; 
+  border: 7px #4ED447 solid;
 }
 
 .incorrect {
   /* border-style: solid;
   border-color: #FF4F63;
   border-width: 7px; */
-  border: 7px #FF4F63 solid; 
+  border: 7px #FF4F63 solid;
 }
 
 .greyedOut {
@@ -350,15 +368,18 @@ video {
 .blink {
   animation-name: animation_blink;
   animation-timing-function: ease-in;
-  animation-duration: 0.4s; 
-  animation-iteration-count: 3;    
-  border: 7px #4ED447 solid; 
+  animation-duration: 0.4s;
+  animation-iteration-count: 3;
+  border: 7px #4ED447 solid;
   z-index: -1;
 }
 
 @keyframes animation_blink {
-  50% { border-color:#fff ; }
+  50% {
+    border-color: #fff;
+  }
 }
+
 
 
 /* Highscore */

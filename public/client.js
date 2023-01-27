@@ -1,5 +1,5 @@
-//const serverURL = "http://localhost:8000";
-const serverURL = "https://nschnell.uber.space/match-the-senses";
+const serverURL = "http://localhost:8000";
+//const serverURL = "https://nschnell.uber.space/match-the-senses";
 
 async function sendGetRequest(url) {
   const response = await fetch(serverURL + url, {

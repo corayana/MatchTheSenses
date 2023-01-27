@@ -5,6 +5,7 @@ const gameScreen = document.querySelector('#game');
 
 const audioElement = document.querySelector('#sound');
 const videoElements = Array.from(document.querySelectorAll('.choice-video'));
+const videoTitle = Array.from(document.querySelectorAll('.title-overlay'))
 const progressText = document.querySelector('#progressText');
 const pointsText = document.querySelector('#pointsText');
 
@@ -292,6 +293,10 @@ async function getNewChallenge() {
 
     videoElem.src = video;
 
+    // add video title
+    const title = videoTitle[i];
+    title.innerText = currentChallenge[videoIndex].title;
+
     if (videoIndex === matchingIndex) {
       matchingVideoElem = videoElem;
       logStr += `[${videoIndex}] `;
@@ -349,6 +354,7 @@ function checkAnswer(e) {
 
     const endTime = performance.now();
     const duration = endTime - startTime;
+    let correctAnswer = false;
 
     console.log(`time: ${(0.001 * duration).toFixed(2)}s`);
 
@@ -357,6 +363,7 @@ function checkAnswer(e) {
 
     if (classToApply === 'correct') {
       console.log('choice correct');
+      correctAnswer = true; 
 
       incrementPoints(scorePoints, duration);
       pointsText.innerText = `${points} Punkte`;;
@@ -384,6 +391,10 @@ function checkAnswer(e) {
         elem.classList.remove('greyedOut');
       }
 
+      // FUNKTIONIERT DAS SO?
+      // const challengeData = { player: username, time: duration, correctAnswer: correctAnswer, };
+      // sendPostRequest("/challengeData", JSON.stringify(challengeData)); 
+
       getNewChallenge();
     }, 3000);
   }
@@ -392,18 +403,20 @@ function checkAnswer(e) {
 function incrementPoints(num, duration) {
   points += num;
 
-  if (duration <= 5000) {
+  if (duration <= 1500) {
     points += 5;
-  } else if (duration <= 6000) {
+  } else if (duration <= 2500) {
     points += 4;
-  } else if (duration <= 7000) {
+  } else if (duration <= 4000) {
     points += 3;
-  } else if (duration <= 8000) {
+  } else if (duration <= 5500) {
     points += 2;
+  } else if (duration <= 7000) {
+    points += 1;
   } else {
     points += 0;
   }
 
   console.log('points: ' + points);
-  
+
 }
