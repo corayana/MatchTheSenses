@@ -2,13 +2,16 @@ const http = require("http");
 const Mongo = require("mongodb");
 const databaseUrl = "mongodb://127.0.0.1:27017";
 const dbName = "match-the-senses";
-const dbCollectionName = "highscores";
+const highscoreCollectionName = "highscores";
+const challengeCollectionName = "challenges";
 const maxHighscores = 10;
 
-let dbCollection = null;
+let highscoreCollection = null;
+let challengeCollection = null;
 
 // list of received player highscores
 let highscores = [];
+let challengeDataSets = [];
 
 // get port from shell or set default (8000)
 const port = Number(process.env.PORT) || 8000;
@@ -33,9 +36,10 @@ async function connectToDb() {
   let mongoClient = new Mongo.MongoClient(databaseUrl, options);
 
   await mongoClient.connect();
-  dbCollection = mongoClient.db(dbName).collection(dbCollectionName);
+  highscoreCollection = mongoClient.db(dbName).collection(highscoreCollectionName);
+  challengeCollection = mongoClient.db(dbName).collection(challengeCollectionName);
 
-  if (dbCollection !== undefined) {
+  if (highscoreCollection !== undefined && challengeCollection !== undefined) {
     console.log("Connnected to db");
   } else {
     console.log("Could not connect to db");
@@ -43,13 +47,21 @@ async function connectToDb() {
 }
 
 async function getDataFromDb() {
-  const dataArray = await dbCollection.find().sort({ "points": -1 }).toArray();
+  let dataArray = await highscoreCollection.find().sort({ "points": -1 }).toArray();
 
   for (let item of dataArray) {
-    highscores.push({ player: item.player, points: item.points });     // todo extend when extending data model
+    highscores.push({ player: item.player, points: item.points });
   }
 
   console.log(highscores);
+
+  dataArray = await challengeCollection.find().toArray();
+
+  for (let item of dataArray) {
+    challengeDataSets.push({ player: item.username, timeNeeded: item.timeNeeded, category: item.challengeCategory, challengeVideos: item.challengeVideos, challengeAnswer: item.challengeAnswer, chosenAnswer: item.chosenAnswer, answeredCorrectly: item.answeredCorrectly});
+  }
+
+  console.log(challengeDataSets);
 }
 
 function handlePostRequest(url, data) {
@@ -67,10 +79,28 @@ function handlePostRequest(url, data) {
       highscores.length = Math.min(highscores.length, maxHighscores);
 
       // add score to db
-      dbCollection.insertOne(score);
+      highscoreCollection.insertOne(score);
       delete score._id;
       break;
     }
+
+
+    case "/challengeData": {
+      const challengeData = JSON.parse(data);
+
+      // add challengeData to challengeDataSets
+      challengeDataSets.push(challengeData);
+
+      // add challengeData to db
+      challengeCollection.insertOne(challengeData);
+
+      break;
+    }
+
+    // TODO
+    // Get request, das json ausgibt
+    // map mit strings der daten -> daten die zu gelicher challenge gehörtn akkumulieren; 
+    // tag der map ist challenge id (Kategorie + videos + audioindex richtig) --> unter challenge id dann daten miteinander assoziieren 
 
     default:
       console.error(`unknown POST request URL: ${url}`);
@@ -88,10 +118,15 @@ function handleGetRequest(url) {
       return JSON.stringify(highscores);
     }
 
+    // send challengeData as JSON string
+    case "/challengeData": {
+      return JSON.stringify(challengeDataSets);
+    }
+
     // clear highscores and db collection
     case "/clear": {
       highscores = [];
-      dbCollection.deleteMany({});
+      highscoreCollection.deleteMany({});
       break;
     }
 

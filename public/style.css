@@ -6,7 +6,7 @@
 }
 
 html {
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* Responsive Layout */
@@ -187,6 +187,7 @@ h3 {
   font-size: 1.3em;
   text-align: center;
   font-weight: 700;
+  margin: 20px 0 8px 0;
 }
 
 .guideText {
