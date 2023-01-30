@@ -6,11 +6,17 @@ const gameScreen = document.querySelector('#game');
 const audioElement = document.querySelector('#sound');
 const videoElements = Array.from(document.querySelectorAll('.choice-video'));
 const videoTitle = Array.from(document.querySelectorAll('.title-overlay'))
-const progressText = document.querySelector('#progressText');
+const roundText = document.querySelector('#roundText');
 const pointsText = document.querySelector('#pointsText');
+
+const progressBar = document.querySelector('#progress-bar-inner');
+const progressBarTitle = document.querySelector('.progress-bar-title');
 
 const scorePoints = 5;
 const maxRounds = 6;
+
+const rightSound = new Audio('../assets/SFX/good-6081.mp3');
+const wrongSound = new Audio('../assets/SFX/negative_beeps-6008.mp3');
 
 let username = '';
 let matchingIndex = null;
@@ -23,6 +29,7 @@ let roundCounter = 0;
 let points = 0;
 let challengeVideos = "";
 let challengeAnswer = "";
+let isPaused = true;
 
 // Array von Objekten: 2 entries (name (Kategorie) + content (=Array mit Videos)
 const challenges = [{
@@ -254,6 +261,7 @@ usernameField.addEventListener('keyup', (e) => {
 });
 
 async function startGame() {
+
   sessionStorage.setItem('username', username);
 
   startScreen.hidden = true;
@@ -262,6 +270,15 @@ async function startGame() {
   roundCounter = 0;
   points = 0;
   availableChallenges = [...challenges];
+
+  setInterval(() => {
+    if (!isPaused) {
+      const currentTime = performance.now();
+      const elapsedTime = currentTime - startTime;
+      const optainablePoints = determinedPoints(elapsedTime);
+      progressBarTitle.innerText = optainablePoints + ' / 10 Punkte';
+    }
+  }, 250);
 
   await getNewChallenge();
   pointsText.innerText = `${points} Punkte`;;
@@ -279,7 +296,7 @@ async function getNewChallenge() {
 
   // increment round
   roundCounter++;
-  progressText.innerText = `Runde ${roundCounter} / ${maxRounds}`;
+  roundText.innerText = `Runde ${roundCounter} / ${maxRounds}`;
 
   // select challenge
   const challengeIndex = Math.floor(Math.random() * availableChallenges.length); //random
@@ -353,21 +370,20 @@ async function getNewChallenge() {
 
 async function videosLoaded() {
   let promises = videoElements.map((video) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       video.addEventListener('canplaythrough', () => {
         // console.log('video can play through');
         resolve();
       });
     })
   });
-
   await Promise.all(promises);
 }
 
 async function startVideosAndSound() {
-  await new Promise((resolve, reject) => {
-    setTimeout(resolve, 200);
-  });
+  /*   await new Promise((resolve, _) => {
+      setTimeout(resolve, 200);
+    }); */
 
   audioElement.play();
   audioElement.loop = true;
@@ -375,15 +391,29 @@ async function startVideosAndSound() {
   for (let elem of videoElements) {
     elem.pause();
     elem.play();
+    // elem.load(); // muss das hier nochmal hin?
     elem.loop = true;
     elem.muted = true;
   };
 
   startTime = performance.now();
+  isPaused = false;
+  console.log("start time: " + startTime);
+
+  progressBar.style.animationPlayState = "running";
+  console.log(progressBar.style.animationPlayState);
+
+  // decrement points in progressBar depending on time left
 }
+
 
 function checkAnswer(e) {
   if (acceptingAnswers) {
+    progressBar.style.animationPlayState = "paused";
+    isPaused = true;
+
+    console.log(progressBar.style.animationPlayState);
+
     acceptingAnswers = false;
 
     const endTime = performance.now();
@@ -400,8 +430,12 @@ function checkAnswer(e) {
       console.log('choice correct');
       answeredCorrectly = true;
 
-      incrementPoints(scorePoints, duration);
-      pointsText.innerText = `${points} Punkte`;;
+      points += determinedPoints(duration);
+      pointsText.innerText = `${points} Punkte`;
+
+      rightSound.play();
+    } else {
+      wrongSound.play();
     }
 
     selectedChoice.parentElement.classList.add(classToApply);
@@ -442,28 +476,35 @@ function checkAnswer(e) {
 
       // TODO: Video-Titel nach ABC sortieren, damit vergleichbarer?
 
+      // reset ProgressBar
+      progressBar.style.animation = 'none';
+      progressBar.offsetWidth;
+      progressBar.style.animation = null;
+      progressBarTitle.innerText = '10 / 10 Punkte';
+
       getNewChallenge();
     }, 3000);
   }
 }
 
-function incrementPoints(num, duration) {
-  points += num;
+function determinedPoints(duration) {
+  let roundPoints = scorePoints;
 
   if (duration <= 1500) {
-    points += 5;
+    roundPoints += 5;
   } else if (duration <= 2500) {
-    points += 4;
+    roundPoints += 4;
   } else if (duration <= 4000) {
-    points += 3;
+    roundPoints += 3;
   } else if (duration <= 5500) {
-    points += 2;
+    roundPoints += 2;
   } else if (duration <= 7000) {
-    points += 1;
+    roundPoints += 1;
   } else {
-    points += 0;
+    roundPoints += 0;
   }
 
-  console.log('points: ' + points);
+  console.log('roundPoints: ' + roundPoints);
 
+  return roundPoints;
 }

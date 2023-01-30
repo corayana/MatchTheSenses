@@ -7,7 +7,7 @@
     content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, viewport-fit=cover, maximum-scale=1" />
   <title>Quiz Page</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/x-icon" href="../assets/LogoYellow.png" />
+  <link rel="icon" type="image/x-icon" href="../assets/Logo/LogoYellow.png" />
   <script src="client.js" defer></script>
   <script src="game.js" defer></script>
 </head>
@@ -17,7 +17,7 @@
   <div id="home">
     <div class="container yellow home">
       <div class="flex-column flex-center whiteBox">
-        <img id="logo-home" src="../assets/LogoYellow.png"></img>
+        <img id="logo-home" src="../assets/Logo/LogoYellow.png"></img>
         <h1>Match <br />The Senses</h1>
         <div class="col-1 col-s-12 guideText">Welches Video passt zum Klang? <br />Du siehst drei Videos im Loop und
           hörst einen Klang. Klicke so schnell wie
@@ -34,9 +34,17 @@
   <div id="game" hidden>
 
     <div class="header">
-      <img id="logo-header" src="../assets/LogoWhite.png"></img>
+      <img id="logo-header" src="../assets/Logo/LogoWhite.png"></img>
       <h2>Match The Senses</h2>
     </div>
+
+
+    <div class="progress-bar">
+      <div class="progress-bar-title">10 / 10 Punkte</div>
+      <div id="progress-bar-inner">
+      </div>
+    </div>
+
 
     <h3>Wähle das richtige Video</h3>
 
@@ -67,7 +75,7 @@
         </div>
         <div class="footer">
           <div id="progress">
-            <p id="progressText" class="progressPrefix">Runde</p>
+            <p id="roundText" class="roundPrefix">Runde</p>
           </div>
           <div id="points">
             <p id="pointsText" class="pointsPrefix">Punkte</p>
