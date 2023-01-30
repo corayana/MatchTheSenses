@@ -211,18 +211,27 @@ p {
 .guideText {
   font-size: 1em;
   font-weight: 500;
-  padding: 2rem;
+  padding: 2rem 2rem 0rem;
   justify-content: center;
   align-items: center;
   line-height: 1.4;
 }
 
+.icon-with-text{
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.icon {
+  width: 2rem;
+}
+
 .attentionText {
   font-size: 1.2em;
   font-weight: 800;
-  color: #FF4F63;
+  color: #000000;
   padding: 1rem;
-
 }
 
 /* Logo Startseite */
