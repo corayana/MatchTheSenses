@@ -296,6 +296,7 @@ async function getNewChallenge() {
   // choose audio/answer index randomly
   matchingIndex = Math.floor(numVideos * Math.random());
   audioElement.src = currentChallenge.content[matchingIndex].audio;
+  audioElement.load();
 
   // remove audio index from video indices
   videoIndices.splice(matchingIndex, 1);
@@ -320,6 +321,7 @@ async function getNewChallenge() {
     const video = currentChallenge.content[videoIndex].video;
 
     videoElem.src = video;
+    videoElem.load();
 
     // add video title
     const title = videoTitle[i];
