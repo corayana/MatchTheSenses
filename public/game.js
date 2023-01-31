@@ -18,6 +18,9 @@ const maxRounds = 6;
 const rightSound = new Audio('../assets/SFX/good-6081.mp3');
 const wrongSound = new Audio('../assets/SFX/negative_beeps-6008.mp3');
 
+rightSound.volume = 0.2;
+wrongSound.volume = 0.2;
+
 let username = '';
 let matchingIndex = null;
 let startTime = 0;
@@ -59,7 +62,7 @@ const challenges = [{
       {
         audio: '../content/Abstellen/Geschnitten_Abstellen_Bürste.mp3',
         video: '../content/Abstellen/Geschnitten_Abstellen_Bürste.mp4',
-        title: 'Bürste',
+        title: 'Buerste',
       },
       {
         audio: '../content/Abstellen/Geschnitten_Abstellen_Feuerzeug.mp3',
@@ -203,7 +206,7 @@ const challenges = [{
       {
         audio: '../content/Fallenlassen/Geschnitten_Fallenlassen_Waescheklammer.mp3',
         video: '../content/Fallenlassen/Geschnitten_Fallenlassen_Waescheklammer.mp4',
-        title: 'Wäscheklammer',
+        title: 'Waescheklammer',
       },
       {
         audio: '../content/Fallenlassen/Geschnitten_Fallenlassen_Zahnpasta.mp3',
@@ -281,7 +284,7 @@ async function startGame() {
   }, 250);
 
   await getNewChallenge();
-  pointsText.innerText = `${points} Punkte`;;
+  pointsText.innerText = `Score: ${points}`;
 }
 
 async function getNewChallenge() {
@@ -431,7 +434,7 @@ function checkAnswer(e) {
       answeredCorrectly = true;
 
       points += determinedPoints(duration);
-      pointsText.innerText = `${points} Punkte`;
+      pointsText.innerText = `Score: ${points}`;
 
       rightSound.play();
     } else {
@@ -504,7 +507,7 @@ function determinedPoints(duration) {
     roundPoints += 0;
   }
 
-  console.log('roundPoints: ' + roundPoints);
+  // console.log('roundPoints: ' + roundPoints);
 
   return roundPoints;
 }

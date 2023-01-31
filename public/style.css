@@ -217,7 +217,7 @@ p {
   line-height: 1.4;
 }
 
-.icon-with-text{
+.icon-with-text {
   display: flex;
   align-items: center;
   margin: 10px;
@@ -471,9 +471,9 @@ video {
 
 /* Highscore */
 
-#highScoresList {
+#highscoreList {
   list-style: decimal;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .high-score {
@@ -483,4 +483,16 @@ video {
 li {
   text-align: justify;
   text-align-last: justify;
+  font-weight: 600;
+}
+
+#finalScore {
+  color: #4ED447;
+  font-size: 1.2rem;
+  margin: 1rem 0 2rem 0; 
+}
+
+#highscore-title {
+  margin: 1rem 0;
+
 }
