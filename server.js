@@ -138,7 +138,7 @@ function handleGetRequest(url) {
       scores = [];
       scoreCollection.deleteMany({});
 
-      challengeCollection = [];
+      challengeDataSets = [];
       challengeCollection.deleteMany({});
       break;
     }
