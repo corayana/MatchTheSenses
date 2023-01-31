@@ -5,7 +5,7 @@ const result = sessionStorage.getItem('result');
 displayHighscores();
 
 async function displayHighscores() {
-  finalScore.innerText = 'Du hast ' + result + ' Punkte erreicht';
+  finalScore.innerText = 'Du hast ' + result + ' Punkte erreicht!';
 
   const highscores = await sendGetRequest('/highscores');
 
