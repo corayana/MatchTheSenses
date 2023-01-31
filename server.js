@@ -2,15 +2,15 @@ const http = require("http");
 const Mongo = require("mongodb");
 const databaseUrl = "mongodb://127.0.0.1:27017";
 const dbName = "match-the-senses";
-const highscoreCollectionName = "highscores";
+const scoreCollectionName = "scores";
 const challengeCollectionName = "challenges";
-const maxHighscores = 10;
+const numHighScores = 10;
 
-let highscoreCollection = null;
+let scoreCollection = null;
 let challengeCollection = null;
 
-// list of received player highscores
-let highscores = [];
+// list of received player scores
+let scores = [];
 let challengeDataSets = [];
 
 // get port from shell or set default (8000)
@@ -36,10 +36,10 @@ async function connectToDb() {
   let mongoClient = new Mongo.MongoClient(databaseUrl, options);
 
   await mongoClient.connect();
-  highscoreCollection = mongoClient.db(dbName).collection(highscoreCollectionName);
+  scoreCollection = mongoClient.db(dbName).collection(scoreCollectionName);
   challengeCollection = mongoClient.db(dbName).collection(challengeCollectionName);
 
-  if (highscoreCollection !== undefined && challengeCollection !== undefined) {
+  if (scoreCollection !== undefined && challengeCollection !== undefined) {
     console.log("Connnected to db");
   } else {
     console.log("Could not connect to db");
@@ -47,18 +47,18 @@ async function connectToDb() {
 }
 
 async function getDataFromDb() {
-  let dataArray = await highscoreCollection.find().sort({ "points": -1 }).toArray();
+  let dataArray = await scoreCollection.find().sort({ "points": -1 }).toArray();
 
   for (let item of dataArray) {
-    highscores.push({ player: item.player, points: item.points });
+    scores.push({ player: item.player, points: item.points });
   }
 
-  console.log(highscores);
+  console.log(scores);
 
   dataArray = await challengeCollection.find().toArray();
 
   for (let item of dataArray) {
-    challengeDataSets.push({ player: item.username, timeNeeded: item.timeNeeded, category: item.challengeCategory, challengeVideos: item.challengeVideos, challengeAnswer: item.challengeAnswer, chosenAnswer: item.chosenAnswer, answeredCorrectly: item.answeredCorrectly});
+    challengeDataSets.push({ player: item.username, timeNeeded: item.timeNeeded, category: item.challengeCategory, challengeVideos: item.challengeVideos, challengeAnswer: item.challengeAnswer, chosenAnswer: item.chosenAnswer, answeredCorrectly: item.answeredCorrectly });
   }
 
   console.log(challengeDataSets);
@@ -66,20 +66,19 @@ async function getDataFromDb() {
 
 function handlePostRequest(url, data) {
   switch (url) {
-    // append score to highscores
+    // append score to scores
     case "/score": {
       const score = JSON.parse(data);
 
-      // add score to highscores
-      highscores.push(score);
+      // add score to scores
+      scores.push(score);
       console.log(score);
 
-      // sort and truncate highscores
-      highscores.sort((a, b) => b.points - a.points);
-      highscores.length = Math.min(highscores.length, maxHighscores);
+      // sort scores
+      scores.sort((a, b) => b.points - a.points);
 
       // add score to db
-      highscoreCollection.insertOne(score);
+      scoreCollection.insertOne(score);
       delete score._id;
       break;
     }
@@ -113,8 +112,19 @@ function handlePostRequest(url, data) {
 function handleGetRequest(url) {
   switch (url) {
 
+    case "/scores": {
+      return JSON.stringify(scores);
+    }
+
     // send highscores as JSON string
     case "/highscores": {
+      const highscores = [];
+
+      for (let i = 0; i < scores.length && numHighScores; i++) {
+        const score = scores[i];
+        highscores.push(score);
+      }
+
       return JSON.stringify(highscores);
     }
 
@@ -125,8 +135,11 @@ function handleGetRequest(url) {
 
     // clear highscores and db collection
     case "/clear": {
-      highscores = [];
-      highscoreCollection.deleteMany({});
+      scores = [];
+      scoreCollection.deleteMany({});
+
+      challengeCollection = [];
+      challengeCollection.deleteMany({});
       break;
     }
 
