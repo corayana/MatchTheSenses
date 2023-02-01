@@ -53,7 +53,7 @@ async function getDataFromDb() {
     scores.push({ player: item.player, points: item.points });
   }
 
-  console.log(scores);
+  // console.log(scores);
 
   dataArray = await challengeCollection.find().toArray();
 
@@ -61,7 +61,7 @@ async function getDataFromDb() {
     challengeDataSets.push({ player: item.username, timeNeeded: item.timeNeeded, category: item.challengeCategory, challengeVideos: item.challengeVideos, challengeAnswer: item.challengeAnswer, chosenAnswer: item.chosenAnswer, answeredCorrectly: item.answeredCorrectly });
   }
 
-  console.log(challengeDataSets);
+  // console.log(challengeDataSets);
 }
 
 function handlePostRequest(url, data) {
@@ -72,7 +72,7 @@ function handlePostRequest(url, data) {
 
       // add score to scores
       scores.push(score);
-      console.log(score);
+      // console.log(score);
 
       // sort scores
       scores.sort((a, b) => b.points - a.points);
@@ -120,7 +120,7 @@ function handleGetRequest(url) {
     case "/highscores": {
       const highscores = [];
 
-      for (let i = 0; i < scores.length && numHighScores; i++) {
+      for (let i = 0; i < scores.length && i < numHighScores; i++) {
         const score = scores[i];
         highscores.push(score);
       }
