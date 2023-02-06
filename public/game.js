@@ -34,6 +34,13 @@ let challengeVideos = "";
 let challengeAnswer = "";
 let isPaused = true;
 
+window.addEventListener("load",function() {
+  setTimeout(function(){
+  // This hides the address bar:
+  window.scrollTo(0, 1);
+  }, 0);
+  });
+
 // Array von Objekten: 2 entries (name (Kategorie) + content (=Array mit Videos)
 const challenges = [{
   name: "Abstellen",
