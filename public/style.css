@@ -9,8 +9,6 @@ html {
   overflow: auto;
 }
 
-
-
 /* Responsive Layout */
 
 /* For mobile phones: */
@@ -136,12 +134,12 @@ html {
   justify-items: center;
   max-width: 80rem;
   /*margin: 0 auto;*/
-  padding: 1rem 1.6rem;
+  /* padding: 1rem 1.6rem;*/
 }
 
 .home {
+  padding: 1rem 1.6rem;
   height: 100vh;
-  background-color: #FFD558;
 }
 
 .yellow {
@@ -151,7 +149,6 @@ html {
 .whiteBox {
   background-color: #ffffff;
   border-radius: 10px;
-
 }
 
 .flex-column {
@@ -211,7 +208,7 @@ p {
 .guideText {
   font-size: 1em;
   font-weight: 500;
-  padding: 2rem 2rem 0rem;
+  padding: 1rem 2rem 0rem;
   justify-content: center;
   align-items: center;
   line-height: 1.4;
@@ -236,7 +233,8 @@ p {
 
 /* Logo Startseite */
 #logo-home {
-  width: 8rem;
+  width: 6.8rem;
+  height: auto;
 }
 
 #logo-header {
